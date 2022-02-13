@@ -1,7 +1,8 @@
 const util = require('util');
 const fs = require('fs');
 
-const uuidv1 = require('uuid/v1');
+const { v4: uuidv4 } = require('uuid');
+uuidv4();
 
 const fileRead = util.promisify(fs.readFile);
 const fileWrite = util.promisify(fs.writeFile);
@@ -24,7 +25,7 @@ class Save {
         if (!title || !text) {
             throw new Error("Title or text is blank");
           }
-        const newNote = { title, text, id: uuidv1() };
+        const newNote = { title, text, id: uuidv4() };
         const notes = await this.getNotes();
         const updatedNotes = [...notes, newNote];
         this.writejson(updatedNotes);
@@ -33,7 +34,7 @@ class Save {
     async deleteNote(id) {
         const notes = await this.getNotes();
         const filteredNotes = notes.filter((note) => note.id !== id);
-        return this.write(filteredNotes);
+        return await this.writejson(filteredNotes);
       }
 }
 

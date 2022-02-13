@@ -12,4 +12,9 @@ router.post('/notes', (req, res) => {
     .then((note) => res.json(note))
 })
 
+router.delete('/notes/:id', (req, res) => {
+    savedNotes.deleteNote(req.params.id)
+      .then(() => res.json({ ok: true }))
+  });
+
 module.exports = router;
